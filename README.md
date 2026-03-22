@@ -16,9 +16,6 @@ A simple Python application that uses OpenCV and MediaPipe to track a single han
 
 ### 1. Clone or Navigate to the Project
 Open your terminal and enter the project directory:
-```bash
-cd /Users/aniketshirodkar/Desktop/Projects/CVWorkshop
-```
 
 ### 2. Create a Virtual Environment
 It is recommended to use a virtual environment to avoid library conflicts:
