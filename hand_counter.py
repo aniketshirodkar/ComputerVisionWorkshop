@@ -8,49 +8,7 @@ python hand_counter.py
 
 import cv2  # For video capture and image processing
 import mediapipe as mp  # For hand landmark detection
-
-# Mapping from count to words
-FINGER_WORDS = {
-    0: "NONE",
-    1: "ONE",
-    2: "TWO",
-    3: "THREE",
-    4: "FOUR",
-    5: "FIVE",
-}
-
-def count_fingers(hand_landmarks):
-    """
-    Counts how many fingers are up based on hand landmarks.
-    Logic: For most fingers, check if tip is above the PIP joint.
-    For the thumb, check if tip is to the side of the IP joint.
-    """
-    fingers = []
-    
-    # MediaPipe landmarks for finger tips and joints
-    # Thumb: 4 (Tip), 3 (IP)
-    # Index: 8 (Tip), 6 (PIP)
-    # Middle: 12 (Tip), 10 (PIP)
-    # Ring: 16 (Tip), 14 (PIP)
-    # Pinky: 20 (Tip), 18 (PIP)
-    
-    # Thumb logic: compare x-coordinates (assuming right hand in selfie view)
-    if hand_landmarks.landmark[4].x < hand_landmarks.landmark[3].x:
-        fingers.append(1)
-    else:
-        fingers.append(0)
-
-    # 4 Fingers logic: compare y-coordinates (tip < pip means finger is up)
-    tips = [8, 12, 16, 20]
-    pips = [6, 10, 14, 18]
-    
-    for tip, pip in zip(tips, pips):
-        if hand_landmarks.landmark[tip].y < hand_landmarks.landmark[pip].y:
-            fingers.append(1)
-        else:
-            fingers.append(0)
-
-    return sum(fingers)
+import hand_logic  # Import finger counting logic and mapping
 
 def main():
     # Initialize MediaPipe Hands
@@ -91,9 +49,9 @@ def main():
                 # Draw landmarks on the frame
                 mp_draw.draw_landmarks(frame, hand_landmarks, mp_hands.HAND_CONNECTIONS)
                 
-                # Count fingers
-                count = count_fingers(hand_landmarks)
-                word = FINGER_WORDS.get(count, "NONE")
+                # Use logic from the separate file
+                count = hand_logic.count_fingers(hand_landmarks)
+                word = hand_logic.FINGER_WORDS.get(count, "NONE")
                 
                 # Print to terminal
                 print(f"Count: {count}, Word: {word}")
