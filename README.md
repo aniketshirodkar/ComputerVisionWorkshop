@@ -1,60 +1,53 @@
 # Hand Counter Workshop
 
-A simple Python application that uses OpenCV and MediaPipe to track a single hand and count the number of fingers held up (0–5) in real-time.
+A small Python app that uses **OpenCV** and **MediaPipe Hand Landmarker** (Tasks API) to track one hand and count fingers (0–5) in real time.
+
+## Official MediaPipe references
+
+This project follows Google’s current **Hand Landmarker** flow (not the removed legacy `mediapipe.solutions` API):
+
+- [Hand landmarks detection guide for Python](https://ai.google.dev/edge/mediapipe/solutions/vision/hand_landmarker/python) — `HandLandmarker`, `RunningMode.VIDEO`, `detect_for_video`, `mp.Image`, model path
+- [Hand Landmarker overview](https://ai.google.dev/edge/mediapipe/solutions/vision/hand_landmarker/index) — capabilities and bundled models
+- [Setup guide for Python](https://ai.google.dev/mediapipe/solutions/setup_python) — supported Python and `pip` versions
+- [Example notebook (Colab)](https://colab.research.google.com/github/googlesamples/mediapipe/blob/main/examples/hand_landmarker/python/hand_landmarker.ipynb)
 
 ## Features
-- Real-time hand tracking using MediaPipe.
-- Finger counting logic (Index, Middle, Ring, Pinky based on joint height; Thumb based on width).
-- Visual feedback on the video frame (Count and Words).
-- Terminal output of results.
+
+- Real-time hand tracking via Hand Landmarker (Tasks API).
+- Finger counting (thumb by horizontal compare; other fingers by tip vs. PIP height).
+- On-screen count and word; optional terminal output.
 
 ## Prerequisites
-- **Python 3.12** is recommended for best compatibility with MediaPipe on modern systems.
-- A working webcam.
 
-## Getting Started
+- **Python 3.9–3.12** (range [supported by MediaPipe Tasks for Python](https://ai.google.dev/mediapipe/solutions/setup_python); use one of these for reliable installs).
+- **pip 20.3+** (`python -m pip install --upgrade pip` if needed).
+- A webcam.
 
-### 1. Clone or Navigate to the Project
-Open your terminal and enter the project directory:
+## Install and run
 
-### 2. Create a Virtual Environment
-It is recommended to use a virtual environment to avoid library conflicts:
+From this directory:
+
 ```bash
-/usr/local/bin/python3.12 -m venv venv
-```
-
-### 3. Activate the Virtual Environment
-- **macOS / Linux:**
-  ```bash
-  source venv/bin/activate
-  ```
-- **Windows:**
-  ```cmd
-  venv\Scripts\activate
-  ```
-
-### 4. Install Dependencies
-```bash
-pip install -r requirements.txt
-```
-
-### 5. Run the Application
-```bash
+python -m pip install -r requirements.txt
 python hand_counter.py
 ```
 
-## Troubleshooting: Camera Permissions (macOS)
-If you encounter an error saying `Error: Could not open webcam`, macOS might be blocking camera access for your Terminal or IDE.
-1. Open **System Settings**.
-2. Go to **Privacy & Security** > **Camera**.
-3. Ensure the toggle is **ON** for your Terminal (e.g., Terminal, iTerm2) or your Code Editor (e.g., VS Code).
+The first run downloads Google’s **`hand_landmarker.task`** model (about 8 MB) into this folder next to `hand_counter.py`. If the automatic download fails (for example SSL on some macOS Python installs), install [`curl`](https://curl.se/) and run the script again; it retries with `curl`.
 
-## Usage & Controls
-- **Fingers 0–5:** Hold up your hand in front of the camera to see the count.
-- **Exit:** Press **'q'** or **ESC** while the video window is focused to close the application.
-- **Deactivate Venv:** When finished, type `deactivate` in your terminal to exit the virtual environment.
+## Troubleshooting: Camera (macOS)
 
-## Project Structure
-- `hand_counter.py`: The main Python script.
-- `requirements.txt`: List of required Python libraries.
-- `README.md`: This instruction file.
+If you see `Error: Could not open webcam`:
+
+1. **System Settings** → **Privacy & Security** → **Camera**
+2. Enable the app that runs Python (Terminal, iTerm, VS Code, Cursor, etc.)
+
+## Usage
+
+- Show 0–5 fingers toward the camera to update the count.
+- Press **q** or **Esc** while the video window is focused to quit.
+
+## Project files
+
+- `hand_counter.py` — webcam loop, Hand Landmarker, drawing.
+- `hand_logic.py` — finger count from 21 landmarks.
+- `requirements.txt` — `opencv-python`, `mediapipe`.

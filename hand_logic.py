@@ -8,17 +8,20 @@ FINGER_WORDS = {
     5: "FIVE",
 }
 
-def count_fingers(hand_landmarks):
+
+def count_fingers(landmarks):
     """
     Counts how many fingers are up based on hand landmarks.
-    Logic: For most fingers, check if tip is above the PIP joint.
-    For the thumb, check if tip is to the side of the IP joint.
+
+    Args:
+        landmarks: Sequence of 21 MediaPipe normalized landmarks (index 0–20),
+            each with .x and .y (Tasks API: list of NormalizedLandmark).
     """
     fingers = []
-    
+
     # Thumb logic: compare x-coordinates (assuming right hand in selfie view)
     # Landmark 4: Thumb Tip, Landmark 3: Thumb IP
-    if hand_landmarks.landmark[4].x < hand_landmarks.landmark[3].x:
+    if landmarks[4].x < landmarks[3].x:
         fingers.append(1)
     else:
         fingers.append(0)
@@ -28,9 +31,9 @@ def count_fingers(hand_landmarks):
     # PIPs: 6 (Index), 10 (Middle), 14 (Ring), 18 (Pinky)
     tips = [8, 12, 16, 20]
     pips = [6, 10, 14, 18]
-    
+
     for tip, pip in zip(tips, pips):
-        if hand_landmarks.landmark[tip].y < hand_landmarks.landmark[pip].y:
+        if landmarks[tip].y < landmarks[pip].y:
             fingers.append(1)
         else:
             fingers.append(0)

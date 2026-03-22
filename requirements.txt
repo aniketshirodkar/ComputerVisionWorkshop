@@ -1,2 +1,4 @@
-opencv-python
-mediapipe
+# MediaPipe Tasks (Hand Landmarker): https://ai.google.dev/edge/mediapipe/solutions/vision/hand_landmarker/python
+# Python 3.9–3.12: https://ai.google.dev/mediapipe/solutions/setup_python
+opencv-python>=4.5.0
+mediapipe>=0.10.0
