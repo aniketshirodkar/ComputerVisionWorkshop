@@ -19,20 +19,114 @@ This project follows Google’s current **Hand Landmarker** flow (not the remove
 
 ## Prerequisites
 
-- **Python 3.9–3.12** (range [supported by MediaPipe Tasks for Python](https://ai.google.dev/mediapipe/solutions/setup_python); use one of these for reliable installs).
-- **pip 20.3+** (`python -m pip install --upgrade pip` if needed).
+- **Python 3.9–3.12** (range [supported by MediaPipe Tasks for Python](https://ai.google.dev/mediapipe/solutions/setup_python); newer Python often works too if `pip` can install `mediapipe`).
+- **pip 20.3+** (see below).
 - A webcam.
 
-## Install and run
+---
 
-From this directory:
+## 1. Python
+
+**Python** is the language runtime. You need a recent **Python 3** installed.
+
+### Check if Python is already installed
+
+Open a terminal (macOS/Linux) or Command Prompt / PowerShell (Windows) and run:
 
 ```bash
-python -m pip install -r requirements.txt
-python hand_counter.py
+python3 --version
 ```
 
-The first run downloads Google’s **`hand_landmarker.task`** model (about 8 MB) into this folder next to `hand_counter.py`. If the automatic download fails (for example SSL on some macOS Python installs), install [`curl`](https://curl.se/) and run the script again; it retries with `curl`.
+On some Windows setups the command is `python` instead of `python3`:
+
+```bash
+python --version
+```
+
+You should see something like `Python 3.9.x` or higher. **Use the same command** (`python3` or `python`) for every step below.
+
+### Install or upgrade Python
+
+If the command is missing or the version is **below 3.9**:
+
+| Platform | What to do |
+|----------|------------|
+| **Any OS** | Download an installer from [python.org/downloads](https://www.python.org/downloads/). On Windows, check **“Add python.exe to PATH”** (or similar) during setup. |
+| **macOS** (Homebrew) | `brew install python@3.12` (or another 3.9+ formula), then use the path Homebrew prints, or ensure `python3` is on your `PATH`. |
+| **Linux** (Debian/Ubuntu) | `sudo apt update && sudo apt install python3 python3-pip python3-venv` |
+
+After installing, open a **new** terminal and run the version check again.
+
+---
+
+## 2. pip
+
+**pip** is Python’s package installer. It is included with most Python 3 installs.
+
+### Check pip
+
+```bash
+python3 -m pip --version
+```
+
+On Windows, if you use `python` for Python:
+
+```bash
+python -m pip --version
+```
+
+You should see a pip version and a path that matches your Python. If this fails, reinstall Python from [python.org](https://www.python.org/downloads/) and enable pip in the installer.
+
+### Upgrade pip (recommended)
+
+```bash
+python3 -m pip install --upgrade pip
+```
+
+(Use `python` instead of `python3` on Windows if that matches how you run Python.)
+
+---
+
+## 3. Install this project and run
+
+In a terminal, go to the folder that contains `hand_counter.py` and `requirements.txt`:
+
+```bash
+cd path/to/ComputerVisionWorkshop
+```
+
+Install the libraries listed in `requirements.txt`:
+
+```bash
+python3 -m pip install -r requirements.txt
+```
+
+Start the app:
+
+```bash
+python3 hand_counter.py
+```
+
+Again, use `python` instead of `python3` everywhere if that is what works on your machine.
+
+### If `pip install` is blocked (common on macOS/Linux system Pythons)
+
+Your OS may forbid installing into the system Python. Pick one:
+
+- **Per-user install:**  
+  `python3 -m pip install --user -r requirements.txt`
+
+- **Project virtual environment** (recommended for isolation):  
+  `python3 -m venv .venv`  
+  `source .venv/bin/activate`  
+  `python -m pip install -r requirements.txt`  
+  `python hand_counter.py`  
+
+On Windows activation: `.venv\Scripts\activate`
+
+The first run downloads Google’s **`hand_landmarker.task`** model (about 8 MB) next to `hand_counter.py`. If the automatic download fails (for example SSL on some macOS Python installs), install [`curl`](https://curl.se/) and run the script again; it retries with `curl`.
+
+---
 
 ## Troubleshooting: Camera (macOS)
 

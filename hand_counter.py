@@ -31,6 +31,38 @@ MODEL_URL = (
 )
 MODEL_FILENAME = "hand_landmarker.task"
 
+# OpenCV camera index: 0 = first device. Change to 1, 2, … if the wrong camera opens (e.g. OBS).
+CAMERA_INDEX = 1
+
+
+def _draw_hand_landmarks(
+    bgr_image: np.ndarray,
+    landmarks: list,
+    connections: list,
+    *,
+    line_color: tuple[int, int, int] = (0, 255, 0),
+    point_color: tuple[int, int, int] = (0, 0, 255),
+    line_thickness: int = 2,
+    point_radius: int = 3,
+) -> None:
+    """Draw normalized hand landmarks on a BGR frame (OpenCV).
+
+    Recent mediapipe wheels omit ``tasks.python.vision.drawing_utils``; this
+    replaces ``draw_landmarks`` for the workshop.
+    """
+    h, w = bgr_image.shape[:2]
+
+    def _px(lm) -> tuple[int, int]:
+        return int(lm.x * w), int(lm.y * h)
+
+    for conn in connections:
+        a = _px(landmarks[conn.start])
+        b = _px(landmarks[conn.end])
+        cv2.line(bgr_image, a, b, line_color, line_thickness)
+
+    for lm in landmarks:
+        cv2.circle(bgr_image, _px(lm), point_radius, point_color, -1)
+
 
 def _ensure_model(model_path: Path) -> Path:
     if model_path.is_file():
@@ -54,7 +86,6 @@ def main():
     HandLandmarker = mp.tasks.vision.HandLandmarker
     HandLandmarkerOptions = mp.tasks.vision.HandLandmarkerOptions
     RunningMode = mp.tasks.vision.RunningMode
-    draw_landmarks = mp.tasks.vision.drawing_utils.draw_landmarks
     HandLandmarksConnections = mp.tasks.vision.HandLandmarksConnections
 
     options = HandLandmarkerOptions(
@@ -67,9 +98,9 @@ def main():
     )
     landmarker = HandLandmarker.create_from_options(options)
 
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(CAMERA_INDEX)
     if not cap.isOpened():
-        print("Error: Could not open webcam.")
+        print(f"Error: Could not open camera index {CAMERA_INDEX}.")
         return
 
     print("Hand Counter Running... Press 'q' or 'ESC' to exit.")
@@ -93,7 +124,7 @@ def main():
 
         if results.hand_landmarks:
             for hand_landmarks in results.hand_landmarks:
-                draw_landmarks(
+                _draw_hand_landmarks(
                     frame,
                     hand_landmarks,
                     HandLandmarksConnections.HAND_CONNECTIONS,
