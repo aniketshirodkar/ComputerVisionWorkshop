@@ -1,6 +1,6 @@
-# Hand Counter Workshop
+# Hand tracking workshop
 
-A small Python app that uses **OpenCV** and **MediaPipe Hand Landmarker** (Tasks API) to track one hand and count fingers (0–5) in real time.
+A small Python project using **OpenCV** and **MediaPipe Hand Landmarker** (Tasks API). **Starter:** a single file, `hand_tracker.py` — live webcam wireframe plus thumb helpers for later counting. **Code-along:** add finger counting and word mapping in the same file. Instructors use `workshop_instructor_reference.py` (keep private; do not share with participants if you use it as a cheat sheet).
 
 ## Official MediaPipe references
 
@@ -14,8 +14,8 @@ This project follows Google’s current **Hand Landmarker** flow (not the remove
 ## Features
 
 - Real-time hand tracking via Hand Landmarker (Tasks API).
-- Finger counting (thumb by horizontal compare; other fingers by tip vs. PIP height).
-- On-screen count and word; optional terminal output.
+- Starter: wireframe overlay only.
+- After the code-along: finger counting (thumb uses robust checks in `hand_tracker.py`; other fingers by tip vs. PIP height) and customizable words/sign-style mappings.
 
 ## Prerequisites
 
@@ -89,7 +89,7 @@ python3 -m pip install --upgrade pip
 
 ## 3. Install this project and run
 
-In a terminal, go to the folder that contains `hand_counter.py` and `requirements.txt`:
+In a terminal, go to the folder that contains `hand_tracker.py` and `requirements.txt`:
 
 ```bash
 cd path/to/ComputerVisionWorkshop
@@ -101,10 +101,10 @@ Install the libraries listed in `requirements.txt`:
 python3 -m pip install -r requirements.txt
 ```
 
-Start the app:
+Start the starter app:
 
 ```bash
-python3 hand_counter.py
+python3 hand_tracker.py
 ```
 
 Again, use `python` instead of `python3` everywhere if that is what works on your machine.
@@ -120,11 +120,11 @@ Your OS may forbid installing into the system Python. Pick one:
   `python3 -m venv .venv`  
   `source .venv/bin/activate`  
   `python -m pip install -r requirements.txt`  
-  `python hand_counter.py`  
+  `python hand_tracker.py`  
 
 On Windows activation: `.venv\Scripts\activate`
 
-The first run downloads Google’s **`hand_landmarker.task`** model (about 8 MB) next to `hand_counter.py`. If the automatic download fails (for example SSL on some macOS Python installs), install [`curl`](https://curl.se/) and run the script again; it retries with `curl`.
+The first run downloads Google’s **`hand_landmarker.task`** model (about 8 MB) next to `hand_tracker.py`. If the automatic download fails (for example SSL on some macOS Python installs), install [`curl`](https://curl.se/) and run the script again; it retries with `curl`.
 
 ---
 
@@ -137,11 +137,12 @@ If you see `Error: Could not open webcam`:
 
 ## Usage
 
-- Show 0–5 fingers toward the camera to update the count.
+- **Starter:** run `hand_tracker.py` and show your hand; you should see the skeleton overlay.
+- **After the code-along:** show 0–5 fingers (or your custom poses) to update count/words.
 - Press **q** or **Esc** while the video window is focused to quit.
 
 ## Project files
 
-- `hand_counter.py` — webcam loop, Hand Landmarker, drawing.
-- `hand_logic.py` — finger count from 21 landmarks.
+- `hand_tracker.py` — participant starter: webcam loop, Hand Landmarker, wireframe drawing, and thumb helpers; counting and words are added during the workshop.
+- `workshop_instructor_reference.py` — instructor-only copy-paste / teaching notes (optional; omit from participant bundles if you prefer).
 - `requirements.txt` — `opencv-python`, `mediapipe`.

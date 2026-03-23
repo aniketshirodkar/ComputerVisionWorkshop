@@ -14,3 +14,7 @@ __pycache__/
 
 # macOS
 .DS_Store
+
+# Instructional / instructor-only (omit from participant repos or zips)
+workshop_instructor_reference.py
+WORKSHOP_DEMO_REFERENCE.md
