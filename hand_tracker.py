@@ -36,7 +36,7 @@ MODEL_URL = (
 MODEL_FILENAME = "hand_landmarker.task"
 
 # OpenCV camera index: 0 = first device. Change to 1, 2, … if the wrong camera opens.
-CAMERA_INDEX = 1
+CAMERA_INDEX = 2
 
 
 def _angle_deg_at_b(ax, ay, bx, by, cx, cy):
@@ -89,41 +89,8 @@ def _thumb_extended(landmarks):
 
     return ang_ip > THUMB_IP_MIN_DEG
 
-FINGER_WORDS = {
-    0: "HELLO",
-    1: "WORLD",
-    2: "FROM",
-    3: "AGGIE",
-    4: "CODING",
-    5: "CLUB",
-}
+# todo: implement finger counting function logic
 
-
-def count_fingers(landmarks):
-    """
-    Counts how many fingers are up based on hand landmarks.
-
-    Args:
-        landmarks: Sequence of 21 MediaPipe normalized landmarks (index 0–20),
-            each with .x and .y (Tasks API: list of NormalizedLandmark).
-    """
-    fingers = []
-
-    fingers.append(1 if _thumb_extended(landmarks) else 0)
-
-    # Other fingers: tip above PIP on screen (smaller y) means extended
-    # Tips: 8 (Index), 12 (Middle), 16 (Ring), 20 (Pinky)
-    # PIPs: 6 (Index), 10 (Middle), 14 (Ring), 18 (Pinky)
-    tips = [8, 12, 16, 20]
-    pips = [6, 10, 14, 18]
-
-    for tip, pip in zip(tips, pips):
-        if landmarks[tip].y < landmarks[pip].y:
-            fingers.append(1)
-        else:
-            fingers.append(0)
-
-    return sum(fingers)
 
 def _draw_hand_landmarks(
     bgr_image: np.ndarray,
@@ -209,6 +176,9 @@ def main():
         timestamp_ms = int((time.time() - start_s) * 1000)
         results = landmarker.detect_for_video(mp_image, timestamp_ms)
 
+        # todo: initialize default count and default word to prevent stale values
+
+
         if results.hand_landmarks:
             for hand_landmarks in results.hand_landmarks:
                 _draw_hand_landmarks(
@@ -216,6 +186,8 @@ def main():
                     hand_landmarks,
                     HandLandmarksConnections.HAND_CONNECTIONS,
                 )
+                # todo: implement finger->word mapping and on-screen drawings
+
 
         cv2.imshow("Hand Tracker", frame)
         
