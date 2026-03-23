@@ -135,6 +135,15 @@ If you see `Error: Could not open webcam`:
 1. **System Settings** → **Privacy & Security** → **Camera**
 2. Enable the app that runs Python (Terminal, iTerm, VS Code, Cursor, etc.)
 
+## Troubleshooting: Camera (Windows)
+
+If the window opens but stays black, or you see `Error: Could not open camera index …`:
+
+1. **Settings** → **Privacy & security** → **Camera** — ensure **Camera access** and **Let desktop apps access your camera** are on (wording varies by Windows version).
+2. Allow the app that runs Python (Command Prompt, PowerShell, Terminal, VS Code, Cursor, etc.).
+3. Close other apps using the webcam (Teams, Zoom, browser tabs).
+4. Try `CAMERA_INDEX = 0` in `hand_tracker.py` (some PCs use `1` for the first usable camera).
+
 ## Usage
 
 - **Starter:** run `hand_tracker.py` and show your hand; you should see the skeleton overlay.
@@ -144,5 +153,7 @@ If you see `Error: Could not open webcam`:
 ## Project files
 
 - `hand_tracker.py` — participant starter: webcam loop, Hand Landmarker, wireframe drawing, and thumb helpers; counting and words are added during the workshop.
-- `workshop_instructor_reference.py` — instructor-only copy-paste / teaching notes (optional; omit from participant bundles if you prefer).
+- `WORKSHOP_DEMO_REFERENCE.md` — **optional deep dive** for students: high-level explanation of functions, landmarks, and the main loop (more detail than the live session).
 - `requirements.txt` — `opencv-python`, `mediapipe`.
+
+Instructor-only materials (e.g. `workshop_instructor_reference.py`, presenter script) may live in the repo but are not required for participants.
